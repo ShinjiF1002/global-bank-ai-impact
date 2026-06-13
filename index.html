@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="color-scheme" content="light dark" />
+<title>世界の大手銀行における高インパクト AI 事例 — 統合リサーチレポート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   Design tokens — Institutional / Strategy-Consulting
+   Brand blue + cool neutral + teal accent. semantic 4-tone.
+   Light is default; [data-theme="dark"] re-binds the same tokens
+   so every component reads from variables (no per-component dark CSS).
+   ============================================================ */
+:root {
+  /* Brand blue scale (deep institutional navy) */
+  --brand-900: #14233f;
+  --brand-800: #1b2f53;
+  --brand-700: #1e3a8a;   /* primary brand blue */
+  --brand-600: #2848a3;
+  --brand-500: #3a5bbd;
+  --brand-100: #e6ecf8;
+  --brand-050: #f3f6fc;
+
+  /* On-brand text (used on brand-700/800 surfaces) */
+  --on-brand: #ffffff;
+  --on-brand-soft: #c3cee2;
+
+  /* Teal accent */
+  --teal-700: #0d6e6e;
+  --teal-600: #0f8a86;
+  --teal-500: #14a8a0;
+  --teal-100: #d8f1ef;
+
+  /* Cool neutrals (no warm beige) */
+  --ink-900: #111726;
+  --ink-700: #2c3547;
+  --ink-600: #455066;
+  --ink-500: #5a6678;
+  --ink-400: #646e7d;   /* AA text on light surfaces (>=4.5:1 on white/canvas/surface-2); also used for decorative dots/borders */
+  --line:    #e2e7f0;
+  --line-strong: #cdd5e3;
+  --surface:  #ffffff;
+  --surface-2:#f7f9fd;
+  --canvas:   #f5f7fb;   /* cool light canvas */
+  --canvas-2: #eef2f9;
+
+  /* Header surface (sticky bar) */
+  --header-bg: rgba(20,35,63,.97);
+
+  /* Semantic status (good / info / warn / danger) — AA on white */
+  --good:      #1b7a4b;  --good-bg:   #e4f4ec;  --good-line: #b7e0c9;
+  --info:      #2156c4;  --info-bg:   #e6edfb;  --info-line: #bdd0f4;
+  --warn:      #845a00;  --warn-bg:   #fbf1da;  --warn-line: #ecd49c;
+  --danger:    #b32639;  --danger-bg: #fbe6e9;  --danger-line:#f0c1c9;
+  --muted-bg:  #eef1f6;  --muted-line:#d8dee9;  --muted-fg:  #5a6678;
+
+  /* Tier scale — confidence gradient T1(strong) -> T5(weak) */
+  --t1: #0d6e6e;  --t1-bg: #d8f1ef;  --t1-line: #b3e2df;
+  --t2: #2156c4;  --t2-bg: #e3ecfb;  --t2-line: #c3d5f6;
+  --t3: #6b5bb5;  --t3-bg: #ece8f8;  --t3-line: #d6cdf0;
+  --t4: #845a00;  --t4-bg: #f8efd6;  --t4-line: #ecd9a8;
+  --t5: #5b626f;  --t5-bg: #edf0f5;  --t5-line: #d5dae3;   /* darkened: 5.37:1 on t5-bg (was 4.23) */
+
+  /* Bar/segment fills (KPI band) */
+  --seg-track: var(--canvas-2);
+
+  /* Multi-layer shadow */
+  --sh-1: 0 1px 2px rgba(20,35,63,.06), 0 1px 1px rgba(20,35,63,.04);
+  --sh-2: 0 2px 4px rgba(20,35,63,.06), 0 6px 16px rgba(20,35,63,.07);
+  --sh-3: 0 8px 24px rgba(20,35,63,.10), 0 2px 6px rgba(20,35,63,.06);
+  --sh-pop: 0 12px 40px rgba(20,35,63,.16), 0 4px 12px rgba(20,35,63,.10);
+
+  --r-sm: 8px;
+  --r:    14px;
+  --r-lg: 18px;
+
+  --font-sans: "Inter", "Noto Sans JP", system-ui, -apple-system, sans-serif;
+  --font-serif: "Noto Serif JP", "Inter", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --header-h: 60px;
+  --focus-ring: var(--teal-600);
+}
+
+/* ============================================================
+   DARK THEME — re-bind tokens. WCAG AA verified pairings:
+   - badge fg vs badge bg target >= 4.5:1 for text-size 11px.
+   - KPI segments stay saturated against the dark track.
+   ============================================================ */
+[data-theme="dark"] {
+  --brand-900: #e8eefb;   /* used as heading ink on dark; high-contrast */
+  --brand-800: #cdd9f4;
+  --brand-700: #8fb0f2;   /* link / accent ink on dark surfaces */
+  --brand-600: #7c9eea;
+  --brand-500: #6f93e6;
+  --brand-100: #1f2c47;   /* "soft brand fill" → dark elevated tint */
+  --brand-050: #182236;
+
+  --on-brand: #f4f7fe;
+  --on-brand-soft: #aeb9d2;
+
+  --teal-700: #6fd6cf;
+  --teal-600: #46c4bc;
+  --teal-500: #2bb3aa;
+  --teal-100: #16302f;
+
+  --ink-900: #eef1f8;
+  --ink-700: #cdd4e2;
+  --ink-600: #aab3c6;
+  --ink-500: #98a2b6;
+  --ink-400: #828ca3;   /* AA text on dark surfaces (>=4.5:1 on surface/surface-2/canvas) */
+  --line:    #2a3550;
+  --line-strong: #3a4767;
+  --surface:  #161d2e;
+  --surface-2:#1b2335;
+  --canvas:   #0f1522;
+  --canvas-2: #1b2335;
+
+  --header-bg: rgba(9,13,22,.96);
+
+  --good:    #5fd198;  --good-bg:   #11341f;  --good-line: #1f5b39;
+  --info:    #8fb0f2;  --info-bg:   #16243f;  --info-line: #2a3f68;
+  --warn:    #f0c36a;  --warn-bg:   #352a12;  --warn-line: #5a4720;
+  --danger:  #f08a98;  --danger-bg: #3a1620;  --danger-line:#612634;
+  --muted-bg:#1b2335;  --muted-line:#33405e;  --muted-fg:  #98a2b6;
+
+  --t1: #5fd6ce;  --t1-bg: #103432;  --t1-line: #1d5754;
+  --t2: #8fb0f2;  --t2-bg: #16243f;  --t2-line: #2a3f68;
+  --t3: #b6a6f0;  --t3-bg: #241f3c;  --t3-line: #3c3460;
+  --t4: #f0c36a;  --t4-bg: #352a12;  --t4-line: #5a4720;
+  --t5: #aab3c6;  --t5-bg: #222b3f;  --t5-line: #36405a;
+
+  --seg-track: #243049;
+
+  --sh-1: 0 1px 2px rgba(0,0,0,.45);
+  --sh-2: 0 4px 14px rgba(0,0,0,.5);
+  --sh-3: 0 10px 30px rgba(0,0,0,.55);
+  --sh-pop: 0 16px 44px rgba(0,0,0,.62), 0 4px 12px rgba(0,0,0,.45);
+
+  --focus-ring: var(--teal-500);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink-900);
+  background: var(--canvas);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background .2s ease, color .2s ease;
+}
+:lang(ja) { letter-spacing: .01em; line-height: 1.8; }
+
+/* Numbers align (tabular everywhere) */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+.mono { font-family: var(--font-mono); font-feature-settings: "tnum" 1; }
+
+a { color: var(--brand-700); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Focus visibility (a11y gate 1) */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2.5px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* 2.4.11 Focus Not Obscured: keep Tab-focused controls clear of the sticky header */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+summary:focus-visible, [tabindex]:focus-visible {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+button { font-family: inherit; }
+
+/* Visually-hidden but screen-reader-available */
+.sr-only {
+  position: absolute !important; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Skip link (a11y) */
+.skip-link {
+  position: absolute; left: 12px; top: -48px;
+  background: var(--brand-700); color: #fff; padding: 10px 16px;
+  border-radius: var(--r-sm); z-index: 1000; font-weight: 600;
+  transition: top .15s ease;
+}
+[data-theme="dark"] .skip-link { background: #2848a3; color: #fff; }
+.skip-link:focus { top: 12px; }
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--header-bg);
+  color: #fff;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06), var(--sh-2);
+  backdrop-filter: saturate(140%) blur(2px);
+}
+.site-header .brand {
+  display: flex; align-items: center; gap: 11px;
+  font-weight: 700; font-size: 14px; letter-spacing: .01em;
+  margin-right: auto; min-width: 0;
+}
+.site-header .mark {
+  width: 26px; height: 26px; border-radius: 7px; flex: none;
+  background: linear-gradient(150deg, var(--teal-500), var(--brand-500));
+  display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.18);
+}
+.site-header .brand .ttl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
+.header-tools { display: flex; align-items: center; gap: 14px; }
+.header-asof {
+  font-size: 12px; color: #c3cee2; font-weight: 500; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.header-asof .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--teal-500); box-shadow: 0 0 0 3px rgba(20,168,160,.25); }
+
+/* Theme toggle */
+.theme-btn {
+  width: 34px; height: 34px; flex: none; display: grid; place-items: center;
+  background: rgba(255,255,255,.1); color: #fff;
+  border: 1px solid rgba(255,255,255,.2); border-radius: 9px; cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.theme-btn:hover { background: rgba(255,255,255,.18); }
+.theme-btn svg { width: 17px; height: 17px; }
+.nav-toggle { display: none; }
+
+/* ============================================================
+   Shell layout: TOC + main
+   ============================================================ */
+.shell {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  max-width: 1480px;
+  margin: 0 auto;
+  align-items: start;
+}
+.toc {
+  position: sticky; top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto;
+  padding: 22px 14px 40px 20px;
+  border-right: 1px solid var(--line);
+  background: var(--canvas);
+}
+.toc h2 {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .09em;
+  color: var(--ink-400); margin: 0 0 10px 8px; font-weight: 700;
+}
+.toc a {
+  display: flex; gap: 8px; align-items: baseline;
+  padding: 7px 10px; margin: 1px 0;
+  border-radius: var(--r-sm);
+  color: var(--ink-700); font-size: 13px; font-weight: 500;
+  border-left: 2.5px solid transparent;
+  transition: background .12s ease, color .12s ease;
+}
+.toc a:hover { background: var(--brand-050); text-decoration: none; }
+.toc a.active {
+  background: var(--brand-100); color: var(--brand-700);
+  font-weight: 600; border-left-color: var(--brand-700);
+}
+.toc a .tn { color: var(--ink-400); font-size: 11px; min-width: 22px; font-variant-numeric: tabular-nums; }
+.toc a.active .tn { color: var(--brand-600); }
+.toc .toc-group { margin-top: 16px; }
+.toc .feature { background: var(--teal-100); color: var(--teal-700); font-weight: 600; }
+.toc .feature:hover { background: var(--teal-100); filter: brightness(.97); }
+.toc .feature.active { background: var(--teal-700); color: #fff; border-left-color: #fff; }
+.toc .feature.active .tn { color: rgba(255,255,255,.85); }
+[data-theme="dark"] .toc .feature.active { color: #08110f; }
+[data-theme="dark"] .toc .feature.active .tn { color: rgba(8,17,15,.7); }
+
+main { min-width: 0; padding: 0 clamp(20px, 4vw, 56px) 80px; }
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero { padding: 28px 0 8px; }
+.hero .eyebrow {
+  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--teal-700); margin-bottom: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.hero .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--teal-600); }
+.hero h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 3.4vw, 40px);
+  line-height: 1.28; margin: 0 0 6px; font-weight: 700;
+  color: var(--brand-900); letter-spacing: .005em;
+  max-width: 22ch;
+}
+.hero .subtitle { font-size: clamp(15px, 1.6vw, 18px); color: var(--ink-500); font-weight: 500; margin: 0 0 22px; }
+.hero .thesis {
+  font-size: clamp(15px, 1.5vw, 17px); line-height: 1.85; color: var(--ink-700);
+  max-width: 62ch; padding: 18px 22px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 4px solid var(--brand-700);
+  border-radius: var(--r); box-shadow: var(--sh-1);
+}
+.hero .thesis strong { color: var(--brand-800); font-weight: 700; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 14px 22px; margin: 16px 0 4px; font-size: 12.5px; color: var(--ink-500); }
+.hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.hero-meta b { color: var(--ink-700); font-weight: 600; }
+
+/* ============================================================
+   Stat band (per-tier / per-status KPI bars + URL reachability)
+   ============================================================ */
+.stat-band {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px;
+  margin: 18px 0 6px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 16px 18px; box-shadow: var(--sh-1);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.stat-card.span3 { grid-column: span 3; }
+.stat-card .label { font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-400); }
+.stat-card .big { font-size: 34px; font-weight: 700; color: var(--brand-800); line-height: 1.05; letter-spacing: -.01em; }
+.stat-card .big small { font-size: 14px; font-weight: 600; color: var(--ink-400); margin-left: 4px; }
+.stat-card .note { font-size: 12px; color: var(--ink-500); }
+
+/* distribution bars */
+.distro { display: flex; flex-direction: column; gap: 9px; }
+.distro .row { display: flex; flex-direction: column; gap: 4px; }
+.distro .row .top { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-700); }
+.distro .row .top b { font-variant-numeric: tabular-nums; }
+.distro .track { height: 8px; border-radius: 6px; background: var(--seg-track); overflow: hidden; display: flex; }
+.distro .seg { height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 4px; font-size: 11.5px; color: var(--ink-500); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+
+/* URL reachability mini */
+.reach { display: flex; gap: 4px; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 2px; }
+.reach span { display: block; }
+
+/* ============================================================
+   Section scaffolding
+   ============================================================ */
+section.block { padding-top: 40px; margin-top: 8px; scroll-margin-top: calc(var(--header-h) + 12px); }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; flex-wrap: wrap; }
+.sec-head .kicker {
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--teal-700);
+}
+h2.sec-title {
+  font-family: var(--font-serif); font-size: clamp(20px, 2.4vw, 27px);
+  color: var(--brand-900); margin: 4px 0 2px; font-weight: 700; line-height: 1.35;
+}
+.sec-rule { height: 3px; width: 56px; background: var(--brand-700); border-radius: 2px; margin: 10px 0 18px; }
+.sec-lede { max-width: 68ch; color: var(--ink-500); font-size: 14px; margin: 0 0 18px; line-height: 1.8; }
+.sec-lede b { color: var(--warn); }
+
+/* ============================================================
+   Top findings
+   ============================================================ */
+.findings-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+.finding {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 16px 18px; box-shadow: var(--sh-1); display: flex; gap: 14px;
+  transition: box-shadow .15s ease, transform .15s ease, border-color .15s ease;
+}
+.finding:hover { box-shadow: var(--sh-2); border-color: var(--line-strong); transform: translateY(-1px); }
+.finding .rank {
+  flex: none; width: 38px; height: 38px; border-radius: 10px;
+  background: var(--brand-700); color: var(--on-brand); font-weight: 700; font-size: 17px;
+  display: grid; place-items: center; box-shadow: var(--sh-1);
+  font-variant-numeric: tabular-nums;
+}
+[data-theme="dark"] .finding .rank { background: #2848a3; color: #fff; }
+.finding .body { min-width: 0; }
+.finding .bank { font-weight: 700; color: var(--brand-800); font-size: 14.5px; }
+.finding .txt { font-size: 13.5px; color: var(--ink-700); margin: 4px 0 10px; line-height: 1.65; }
+.finding .foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.finding .src { font-size: 12px; font-weight: 600; color: var(--brand-700); display: inline-flex; align-items: center; gap: 3px; }
+
+/* ============================================================
+   Badges (tier / status / reach) + claim-id chip (mono)
+   ============================================================ */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; letter-spacing: .01em;
+  padding: 2.5px 8px; border-radius: 100px; border: 1px solid transparent;
+  white-space: nowrap; line-height: 1.5;
+}
+.badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+.tier-T1 { color: var(--t1); background: var(--t1-bg); border-color: var(--t1-line); }
+.tier-T2 { color: var(--t2); background: var(--t2-bg); border-color: var(--t2-line); }
+.tier-T3 { color: var(--t3); background: var(--t3-bg); border-color: var(--t3-line); }
+.tier-T4 { color: var(--t4); background: var(--t4-bg); border-color: var(--t4-line); }
+.tier-T5 { color: var(--t5); background: var(--t5-bg); border-color: var(--t5-line); }
+
+.st-production-safe { color: var(--good); background: var(--good-bg); border-color: var(--good-line); }
+.st-directional     { color: var(--info); background: var(--info-bg); border-color: var(--info-line); }
+.st-unverified      { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-line); }
+.st-refuted         { color: var(--danger); background: var(--danger-bg); border-color: var(--danger-line); }
+.st-production-safe .dot { background: var(--good); }
+.st-directional .dot { background: var(--info); }
+.st-unverified .dot { background: var(--warn); }
+.st-refuted .dot { background: var(--danger); }
+
+.badge.reach-no { color: var(--warn); background: var(--warn-bg); border-color: var(--warn-line); }
+.badge.reach-mirror { color: var(--info); background: var(--info-bg); border-color: var(--info-line); }
+
+/* monospace claim id chip */
+.cid {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  color: var(--brand-700); background: var(--brand-050);
+  border: 1px solid var(--line); border-radius: 6px;
+  padding: 1.5px 6px; letter-spacing: 0; white-space: nowrap;
+}
+
+/* ============================================================
+   Markdown prose
+   ============================================================ */
+.prose-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  box-shadow: var(--sh-1); overflow: hidden;
+}
+.prose-card > details > summary {
+  list-style: none; cursor: pointer; padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 600; color: var(--brand-800); font-size: 14px;
+  user-select: none; background: var(--surface-2);
+  border-bottom: 1px solid transparent;
+}
+.prose-card > details[open] > summary { border-bottom-color: var(--line); }
+.prose-card > details > summary::-webkit-details-marker { display: none; }
+.prose-card > details > summary .chev {
+  margin-left: auto; transition: transform .2s ease; color: var(--ink-400); flex: none;
+}
+.prose-card > details[open] > summary .chev { transform: rotate(180deg); }
+.prose-card > details > summary .hint { font-weight: 500; color: var(--ink-400); font-size: 12px; }
+.prose {
+  padding: 4px 28px 28px; max-width: 78ch; font-size: 14.5px; color: var(--ink-700);
+}
+.prose p { margin: 1em 0; line-height: 1.85; }
+.prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-family: var(--font-serif); color: var(--brand-900); line-height: 1.4;
+  margin: 1.6em 0 .5em; scroll-margin-top: 90px;
+}
+.prose h2 { font-size: 20px; border-bottom: 1px solid var(--line); padding-bottom: .3em; }
+.prose h3 { font-size: 18px; border-bottom: 1px solid var(--line); padding-bottom: .25em; }
+.prose h4 { font-size: 16px; color: var(--brand-700); }
+.prose h5 { font-size: 14.5px; color: var(--brand-700); }
+.prose h6 { font-size: 13.5px; color: var(--ink-600); text-transform: uppercase; letter-spacing: .04em; }
+.prose strong { color: var(--brand-800); font-weight: 700; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin: .35em 0; }
+.prose blockquote {
+  border-left: 3px solid var(--teal-500); margin: 1em 0; padding: .4em 1em;
+  background: var(--teal-100); border-radius: 0 var(--r-sm) var(--r-sm) 0; color: var(--ink-700);
+}
+.prose code {
+  background: var(--canvas-2); padding: .12em .4em; border-radius: 5px;
+  font-size: .88em; font-family: var(--font-mono); color: var(--brand-800);
+}
+.prose pre { background: var(--brand-900); color: #e6ecf8; padding: 14px 16px; border-radius: var(--r-sm); overflow-x: auto; }
+[data-theme="dark"] .prose pre { background: #05080f; color: #cdd9f4; }
+.prose pre code { background: none; color: inherit; padding: 0; }
+.prose a { color: var(--brand-700); text-decoration: underline; text-decoration-color: var(--line-strong); text-underline-offset: 2px; word-break: break-word; }
+.prose a:hover { text-decoration-color: var(--brand-700); }
+.prose hr { border: none; border-top: 1px solid var(--line); margin: 1.8em 0; }
+/* tables */
+.prose table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 13px; display: block; overflow-x: auto; }
+.prose thead th {
+  background: var(--brand-700); color: var(--on-brand); text-align: left; padding: 9px 12px;
+  font-weight: 600; white-space: nowrap; border: 1px solid var(--brand-600);
+}
+[data-theme="dark"] .prose thead th { background: #243556; color: #eef1f8; border-color: #2f4467; }
+.prose tbody td { padding: 8px 12px; border: 1px solid var(--line); vertical-align: top; }
+.prose tbody tr:nth-child(even) { background: var(--surface-2); }
+.prose tbody tr:hover { background: var(--brand-050); }
+
+/* ============================================================
+   Evidence Explorer
+   ============================================================ */
+.explorer-shell { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--sh-2); overflow: hidden; }
+.explorer-top {
+  padding: 18px 20px; border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+}
+.search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.search-box { position: relative; flex: 1 1 320px; min-width: 220px; }
+.search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--ink-400); }
+.search-box input {
+  width: 100%; padding: 11px 14px 11px 38px; border: 1.5px solid var(--line-strong);
+  border-radius: var(--r-sm); font-size: 14px; font-family: inherit; color: var(--ink-900);
+  background: var(--surface); transition: border-color .12s ease, box-shadow .12s ease;
+}
+.search-box input::placeholder { color: var(--ink-400); }
+.search-box input:focus { outline: none; border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(58,91,189,.18); }
+.count-pill {
+  font-size: 13px; font-weight: 600; color: var(--brand-800);
+  background: var(--brand-100); padding: 8px 14px; border-radius: var(--r-sm); white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.count-pill b { color: var(--brand-700); }
+.btn-reset {
+  font-size: 12.5px; font-weight: 600; color: var(--ink-500); background: var(--surface);
+  border: 1.5px solid var(--line-strong); border-radius: var(--r-sm); padding: 8px 13px; cursor: pointer;
+  transition: background .12s ease, color .12s ease, border-color .12s ease;
+}
+.btn-reset:hover { background: var(--canvas-2); color: var(--ink-900); }
+
+.filter-bank { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.filter-grp { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-grp .gl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-400); min-width: 64px; }
+.chip {
+  font-size: 12px; font-weight: 600; padding: 5px 11px; border-radius: 100px;
+  border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink-700); cursor: pointer;
+  transition: all .12s ease; display: inline-flex; align-items: center; gap: 6px;
+}
+.chip:hover { border-color: var(--brand-500); color: var(--brand-700); }
+.chip .ct { font-variant-numeric: tabular-nums; font-size: 11px; opacity: .7; }
+.chip.on { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
+.chip.on .ct { opacity: .85; }
+[data-theme="dark"] .chip.on { color: #08111f; }
+/* tier/status chips reflect semantic color when on */
+.chip.tierchip.on.c-T1 { background: var(--t1); border-color: var(--t1); color: #fff; }
+.chip.tierchip.on.c-T2 { background: var(--t2); border-color: var(--t2); color: #fff; }
+.chip.tierchip.on.c-T3 { background: var(--t3); border-color: var(--t3); color: #fff; }
+.chip.tierchip.on.c-T4 { background: var(--t4); border-color: var(--t4); color: #fff; }
+.chip.tierchip.on.c-T5 { background: var(--t5); border-color: var(--t5); color: #fff; }
+.chip.stchip.on.c-production-safe { background: var(--good); border-color: var(--good); color: #fff; }
+.chip.stchip.on.c-directional { background: var(--info); border-color: var(--info); color: #fff; }
+.chip.stchip.on.c-unverified { background: var(--warn); border-color: var(--warn); color: #fff; }
+.chip.stchip.on.c-refuted { background: var(--danger); border-color: var(--danger); color: #fff; }
+[data-theme="dark"] .chip.tierchip.on, [data-theme="dark"] .chip.stchip.on { color: #0b0f18; }
+
+.bank-select {
+  font-size: 13px; padding: 7px 12px; border-radius: var(--r-sm); border: 1.5px solid var(--line-strong);
+  background: var(--surface); color: var(--ink-700); font-family: inherit; min-width: 180px; max-width: 260px;
+}
+.bank-select:focus { outline: none; border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(58,91,189,.18); }
+
+/* Table */
+.exp-table-wrap { max-height: 760px; overflow-y: auto; overflow-x: auto; }
+.exp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.exp-table thead th {
+  position: sticky; top: 0; z-index: 2; background: var(--brand-800); color: #fff;
+  text-align: left; padding: 11px 14px; font-weight: 600; font-size: 12px; letter-spacing: .02em;
+  border-bottom: 2px solid var(--brand-700); white-space: nowrap;
+}
+[data-theme="dark"] .exp-table thead th { background: #1c2944; border-bottom-color: #2f4467; }
+.exp-row { border-bottom: 1px solid var(--line); cursor: pointer; transition: background .1s ease; }
+.exp-row:hover { background: var(--brand-050); }
+.exp-row:focus-visible { outline: 2.5px solid var(--focus-ring); outline-offset: -2px; }
+.exp-row td { padding: 11px 14px; vertical-align: top; }
+.exp-row td.c-id { white-space: nowrap; }
+.exp-row td.c-bank { font-weight: 700; color: var(--brand-800); white-space: nowrap; }
+.exp-row td.c-bank .reg { display: block; font-weight: 500; color: var(--ink-400); font-size: 11px; }
+.exp-row td.c-domain { color: var(--ink-500); font-size: 12px; white-space: nowrap; }
+.exp-row td.c-claim { color: var(--ink-700); line-height: 1.55; min-width: 280px; }
+.exp-row td.c-claim .uc { display: block; font-size: 11.5px; color: var(--teal-700); font-weight: 600; margin-bottom: 2px; }
+.exp-row td.c-badges { white-space: nowrap; }
+.exp-row td.c-badges .badge { margin: 1px 2px; }
+.exp-row td.c-src { white-space: nowrap; text-align: right; }
+.exp-row .expander { color: var(--ink-400); transition: transform .18s ease; display: inline-block; }
+.exp-row.open .expander { transform: rotate(90deg); color: var(--brand-700); }
+.exp-row.flag-no td.c-id { box-shadow: inset 3px 0 0 var(--warn); }
+
+.exp-detail td { padding: 0; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.exp-detail .inner { padding: 16px 22px 20px; display: flex; flex-direction: column; gap: 14px; }
+.exp-detail .meta-line { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12px; color: var(--ink-500); align-items: center; }
+.exp-detail .meta-line b { color: var(--ink-700); font-weight: 600; }
+/* side-by-side quote vs caveat — the anti-overclaim core */
+.qc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.qc-grid .qt-block, .qc-grid .cv-block { border-radius: var(--r-sm); padding: 12px 16px; min-width: 0; }
+.qc-grid .qt-block { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--teal-500); }
+.qc-grid .cv-block { background: var(--warn-bg); border: 1px solid var(--warn-line); border-left: 3px solid var(--warn); }
+.blk-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.qt-block .blk-label { color: var(--teal-700); }
+.cv-block .blk-label { color: var(--warn); }
+.blk-body { font-size: 13px; line-height: 1.7; color: var(--ink-700); }
+.qt-block .blk-body { font-family: var(--font-serif); font-style: normal; }
+.src-line a { font-weight: 600; word-break: break-all; }
+.src-line .url-mono { font-family: var(--font-mono); font-size: 11.5px; word-break: break-all; }
+.mirror-note { font-size: 12px; color: var(--info); }
+.flag-note { font-size: 12px; color: var(--warn); }
+
+.empty-state { padding: 56px 20px; text-align: center; color: var(--ink-400); }
+.empty-state .big { font-size: 16px; font-weight: 600; color: var(--ink-500); margin-bottom: 4px; }
+
+/* Card view (mobile) */
+.exp-cards { display: none; }
+
+/* ============================================================
+   Excluded / showcase panel
+   ============================================================ */
+.excluded-note {
+  background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--warn);
+  border-radius: var(--r); padding: 14px 18px; margin-bottom: 16px; font-size: 13.5px; color: var(--ink-700);
+}
+.excluded-note b { color: var(--brand-800); }
+.excl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+.excl-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 15px 17px; box-shadow: var(--sh-1); display: flex; flex-direction: column; gap: 9px;
+}
+.excl-card.refuted { border-left: 3px solid var(--danger); }
+.excl-card.unverified { border-left: 3px solid var(--warn); }
+.excl-card .top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.excl-card .bank { font-weight: 700; color: var(--brand-800); font-size: 14px; }
+.excl-card .claim { font-size: 13px; color: var(--ink-700); line-height: 1.6; }
+.excl-card .cav { font-size: 12px; color: var(--ink-500); line-height: 1.6; border-top: 1px dashed var(--line-strong); padding-top: 8px; }
+.excl-card .cav b { color: var(--warn); }
+.dropped-toggle { margin-top: 18px; }
+.dropped-toggle summary { cursor: pointer; font-weight: 600; color: var(--brand-700); font-size: 13.5px; padding: 8px 0; }
+.dropped-list { font-size: 13px; color: var(--ink-600); display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.dropped-list .di { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 12px 15px; }
+.dropped-list .di .bk { font-weight: 600; color: var(--brand-700); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.dropped-list .di .cl { color: var(--ink-700); margin: 3px 0; }
+.dropped-list .di .rs { color: var(--ink-500); font-size: 12px; line-height: 1.6; }
+
+/* ============================================================
+   Methodology
+   ============================================================ */
+.method-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.method-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; box-shadow: var(--sh-1); }
+.method-card h3 { margin: 0 0 12px; font-size: 15px; color: var(--brand-800); font-family: var(--font-serif); }
+.def-list { display: flex; flex-direction: column; gap: 9px; }
+.def-list .d { display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: start; font-size: 13px; }
+.def-list .d .k { display: flex; }
+.def-list .d .v { color: var(--ink-600); line-height: 1.6; }
+.fresh-row { display: flex; flex-wrap: wrap; gap: 10px 28px; font-size: 13.5px; }
+.fresh-row .fi b { color: var(--brand-800); font-weight: 600; }
+.fresh-row .fi { color: var(--ink-600); }
+.limit-box { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: var(--r-sm); padding: 12px 16px; font-size: 13px; color: var(--ink-700); line-height: 1.7; margin-top: 12px; }
+.limit-box b { color: var(--warn); }
+
+footer.site-foot {
+  margin-top: 60px; padding: 28px clamp(20px,4vw,56px); border-top: 1px solid var(--line);
+  color: var(--ink-400); font-size: 12.5px; display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between;
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 1040px) {
+  .shell { grid-template-columns: 1fr; }
+  .toc {
+    position: fixed; top: var(--header-h); left: 0; bottom: 0; width: 280px; z-index: 90;
+    background: var(--surface); box-shadow: var(--sh-3); transform: translateX(-105%);
+    transition: transform .22s ease; border-right: 1px solid var(--line); height: auto;
+  }
+  .toc.open { transform: translateX(0); }
+  .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.18);
+    border-radius: var(--r-sm); padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer; margin-right: 14px;
+  }
+  .scrim { position: fixed; inset: var(--header-h) 0 0 0; background: rgba(17,23,38,.4); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+  .scrim.show { opacity: 1; pointer-events: auto; }
+}
+@media (max-width: 880px) {
+  .stat-card.span3 { grid-column: span 6; }
+  .findings-grid { grid-template-columns: 1fr; }
+  .method-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  main { padding: 0 16px 60px; }
+  .exp-table-wrap { display: none; }
+  .exp-cards { display: flex; flex-direction: column; gap: 12px; padding: 14px; }
+  .ecard {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+    box-shadow: var(--sh-1); padding: 14px 16px; cursor: pointer;
+  }
+  .ecard.flag-no { border-left: 3px solid var(--warn); }
+  .ecard .top { display: flex; justify-content: space-between; align-items: start; gap: 8px; }
+  .ecard .bank { font-weight: 700; color: var(--brand-800); font-size: 14px; }
+  .ecard .reg { font-size: 11px; color: var(--ink-400); }
+  .ecard .uc { font-size: 11.5px; color: var(--teal-700); font-weight: 600; margin: 8px 0 3px; }
+  .ecard .claim { font-size: 13px; color: var(--ink-700); line-height: 1.6; }
+  .ecard .badges { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .ecard .detail { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+  .ecard .qc-grid { grid-template-columns: 1fr; }
+  .stat-card .big { font-size: 28px; }
+  .hero .thesis { padding: 14px 16px; }
+  .qc-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .stat-card.span3 { grid-column: span 12; }
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%231e3a8a%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2716%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EAI%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<a href="#main" class="skip-link">本文へスキップ</a>
+
+<header class="site-header">
+  <button class="nav-toggle" id="navToggle" aria-label="目次を開閉" aria-expanded="false" aria-controls="toc">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    目次
+  </button>
+  <div class="brand">
+    <span class="mark" aria-hidden="true">AI</span>
+    <span class="ttl" id="brandTitle">Global Bank AI — Research Dashboard</span>
+  </div>
+  <div class="header-tools">
+    <div class="header-asof"><span class="dot" aria-hidden="true"></span><span>as-of <b id="hdrAsof" class="tnum"></b></span></div>
+    <button class="theme-btn" id="themeBtn" aria-label="ライト / ダークモード切替" aria-pressed="false" title="ライト / ダーク切替">
+      <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="scrim" id="scrim"></div>
+
+<div class="shell">
+  <nav class="toc" id="toc" aria-label="目次">
+    <h2>目次</h2>
+    <div id="tocList"></div>
+  </nav>
+
+  <main id="main">
+    <!-- HERO -->
+    <header class="hero">
+      <span class="eyebrow">Integrated Research SSOT · Corporate Banking</span>
+      <h1 id="heroTitle"></h1>
+      <p class="subtitle" id="heroSubtitle"></p>
+      <p class="thesis" id="heroThesis"></p>
+      <div class="hero-meta" id="heroMeta"></div>
+    </header>
+
+    <!-- STAT BAND -->
+    <div class="stat-band" id="statBand"></div>
+
+    <!-- TOP FINDINGS -->
+    <section class="block" id="sec-top">
+      <div class="sec-head"><span class="kicker">Top Findings</span></div>
+      <h2 class="sec-title">最もインパクトの大きい 10 事例</h2>
+      <div class="sec-rule"></div>
+      <div class="findings-grid" id="findingsGrid"></div>
+    </section>
+
+    <!-- SECTIONS injected here -->
+    <div id="sectionsHost"></div>
+
+    <!-- EVIDENCE EXPLORER -->
+    <section class="block" id="sec-explorer">
+      <div class="sec-head"><span class="kicker">Evidence Explorer · 主役機能</span></div>
+      <h2 class="sec-title" id="explorerTitle">Evidence Explorer — claim を検証可能に</h2>
+      <div class="sec-rule"></div>
+      <p class="sec-lede">
+        全 claim を Tier・status・領域・銀行で絞り込み、行を開くと逐語引用 (supporting quote) と
+        <b>ソースが言っていないこと</b> (caveat) を<strong>横並び対比</strong>で表示。誇張を機構的に防ぐための検証 surface。
+        各行先頭の <span class="cid">C###</span> は claim id（参照用）。
+      </p>
+      <div class="explorer-shell">
+        <div class="explorer-top">
+          <div class="search-row">
+            <div class="search-box">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <input type="search" id="searchInput" placeholder="claim・銀行・use case・id を全文検索…" aria-label="claim を検索" />
+            </div>
+            <select class="bank-select" id="bankSelect" aria-label="銀行で絞り込み"></select>
+            <span class="count-pill" id="countPill" role="status" aria-live="polite" aria-atomic="true"></span>
+            <button class="btn-reset" id="btnReset">フィルタ解除</button>
+          </div>
+          <div class="filter-bank">
+            <div class="filter-grp"><span class="gl">Tier</span><div id="tierChips" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+            <div class="filter-grp"><span class="gl">Status</span><div id="statusChips" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+            <div class="filter-grp"><span class="gl">Domain</span><div id="domainChips" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+          </div>
+        </div>
+        <div class="exp-table-wrap">
+          <table class="exp-table" aria-label="Evidence claim 一覧">
+            <thead>
+              <tr>
+                <th style="width:28px" aria-label="展開"></th>
+                <th style="width:64px">ID</th>
+                <th style="width:118px">Bank</th>
+                <th style="width:94px">Domain</th>
+                <th>Claim / Use case</th>
+                <th style="width:150px">Tier · Status</th>
+                <th style="width:64px;text-align:right">Source</th>
+              </tr>
+            </thead>
+            <tbody id="expBody"></tbody>
+          </table>
+        </div>
+        <div class="exp-cards" id="expCards"></div>
+      </div>
+    </section>
+
+    <!-- EXCLUDED SHOWCASE -->
+    <section class="block" id="sec-excluded">
+      <div class="sec-head"><span class="kicker">誇張防止ショーケース</span></div>
+      <h2 class="sec-title">本文断定に使わなかった claim</h2>
+      <div class="sec-rule"></div>
+      <div class="excluded-note" id="excludedNote"></div>
+      <div class="excl-grid" id="excludedGrid"></div>
+      <details class="dropped-toggle" id="droppedToggle">
+        <summary>重複統合により drop した候補 (<span id="droppedCount"></span> 件) を表示</summary>
+        <div class="dropped-list" id="droppedList"></div>
+      </details>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section class="block" id="sec-method">
+      <div class="sec-head"><span class="kicker">方法論 &amp; 鮮度</span></div>
+      <h2 class="sec-title">Tier / status 定義・freshness・限界</h2>
+      <div class="sec-rule"></div>
+      <div class="method-grid">
+        <div class="method-card">
+          <h3>Tier — 出典の信頼度</h3>
+          <div class="def-list">
+            <div class="d"><span class="k"><span class="badge tier-T1">T1</span></span><span class="v">一次/自己開示相当 (株主向け書簡・有価証券報告書・SEC filing・公式ブログ)。最も強い。</span></div>
+            <div class="d"><span class="k"><span class="badge tier-T2">T2</span></span><span class="v">主要メディア・アナリスト報道。発行体本人の開示ではない。</span></div>
+            <div class="d"><span class="k"><span class="badge tier-T3">T3</span></span><span class="v">ベンダー事例・業界専門メディア。</span></div>
+            <div class="d"><span class="k"><span class="badge tier-T4">T4</span></span><span class="v">集約メディア・第三者集計。provenance が弱い。</span></div>
+            <div class="d"><span class="k"><span class="badge tier-T5">T5</span></span><span class="v">最も弱い provenance。参考のみ。</span></div>
+          </div>
+        </div>
+        <div class="method-card">
+          <h3>Status — evidence の確証度</h3>
+          <div class="def-list">
+            <div class="d"><span class="k"><span class="badge st-production-safe"><span class="dot"></span>safe</span></span><span class="v">肯定・確証。本番資料に断定として使用可。</span></div>
+            <div class="d"><span class="k"><span class="badge st-directional"><span class="dot"></span>direct.</span></span><span class="v">方向性。規模感は妥当だが断定は不可 (自己申告・見込みを含む)。</span></div>
+            <div class="d"><span class="k"><span class="badge st-unverified"><span class="dot"></span>unver.</span></span><span class="v">未確認。一次未到達 or 逐語未確認。本文断定に未使用。</span></div>
+            <div class="d"><span class="k"><span class="badge st-refuted"><span class="dot"></span>refuted</span></span><span class="v">否定。記載どおりでは誤り。帰属・解釈の誤りを含む。</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="method-card" style="margin-top:16px">
+        <h3>Freshness &amp; 限界</h3>
+        <div class="fresh-row">
+          <span class="fi">as-of: <b id="mAsof" class="tnum"></b></span>
+          <span class="fi">次回再検証: <b>2026-09 (各行 Q2 決算後)</b></span>
+          <span class="fi">手法: <b>2 波 multi-agent → merged evidence 再生成 → 多段 critic</b></span>
+        </div>
+        <div class="limit-box">
+          <b>限界:</b> 開示数値の多くは <b>導入規模・自己申告・target/見込み (estimated / forward-looking)</b> であり、
+          監査済みの実現 P&amp;L はごく限られる。realized 財務値として並置できるのは DBS 等ごく一部。
+          数値は原通貨・原文どおり、桁を機械検算済み。未到達 URL (<span id="mNoUrl" class="tnum"></span> 件) は unverified 扱いで本文断定に未使用。
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="site-foot">
+  <span id="footMeta"></span>
+  <span>研究 SSOT — exec brief / PPT / HTML の上流 evidence</span>
+</footer>
+
+<script src="./marked.min.js"></script>
+<script>
+(async function () {
+  "use strict";
+
+  /* ---------- Theme (light/dark) — set EARLY to avoid flash ----------
+     Order: stored localStorage → prefers-color-scheme. */
+  (function initTheme() {
+    const root = document.documentElement;
+    const btn = document.getElementById("themeBtn");
+    const sun = document.getElementById("iconSun"), moon = document.getElementById("iconMoon");
+    let stored = null;
+    try { stored = localStorage.getItem("bankai-theme"); } catch (e) {}
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const apply = (t) => {
+      root.setAttribute("data-theme", t);
+      sun.style.display = t === "dark" ? "none" : "block";
+      moon.style.display = t === "dark" ? "block" : "none";
+      btn.setAttribute("aria-pressed", String(t === "dark"));
+    };
+    apply(stored === "dark" || stored === "light" ? stored : (prefersDark ? "dark" : "light"));
+    btn.addEventListener("click", () => {
+      const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      apply(next);
+      try { localStorage.setItem("bankai-theme", next); } catch (e) {}
+    });
+    // follow OS change only when user has not explicitly chosen
+    if (window.matchMedia) {
+      const mq = window.matchMedia("(prefers-color-scheme: dark)");
+      const onChange = (e) => { let s = null; try { s = localStorage.getItem("bankai-theme"); } catch (_) {} if (!s) apply(e.matches ? "dark" : "light"); };
+      mq.addEventListener ? mq.addEventListener("change", onChange) : mq.addListener && mq.addListener(onChange);
+    }
+  })();
+
+  /* ---------- Data load ---------- */
+  let DATA;
+  if (window.__REPORT_DATA__) {
+    DATA = window.__REPORT_DATA__;
+  } else {
+    try {
+      const res = await fetch("./data.json");
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      DATA = await res.json();
+    } catch (err) {
+      const main = document.getElementById("main");
+      if (main) {
+        main.innerHTML =
+          '<div class="empty-state" role="alert">' +
+          '<div class="big">データを読み込めませんでした (data.json)</div>' +
+          '<div>ローカルで開く場合は HTTP サーバ経由で開いてください' +
+          ' (例: <code>python3 -m http.server</code> でこのフォルダを配信し、' +
+          ' <code>http://localhost:8000/index.html</code> を開く)。' +
+          ' file:// で直接開くと fetch がブロックされます。</div>' +
+          '<div style="margin-top:8px;font-size:12px;color:var(--ink-400)">詳細: ' +
+          String(err && err.message || err).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])) +
+          '</div></div>';
+      }
+      return;
+    }
+  }
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const nf = (n) => (n == null ? "—" : Number(n).toLocaleString("en-US"));
+
+  /* ---------- marked config ---------- */
+  if (window.marked && marked.use) {
+    marked.use({ gfm: true, breaks: false });
+  }
+  // Each section already renders a real <h2 class="sec-title">. marked does not down-shift levels,
+  // so a prose body containing '#'/'##'/'###' would emit in-section h1/h2/h3 that collide with (or
+  // skip past) the section h2. Demote prose headings so the shallowest becomes h3 (directly below the
+  // section h2) and deeper levels follow without rank gaps: h1->h3, h2->h3, h3->h4, h4->h5, h5/h6->h6.
+  const HEADING_DEMOTE = { 1: 3, 2: 3, 3: 4, 4: 5, 5: 6, 6: 6 };
+  function demoteHeadings(html) {
+    return html.replace(/<(\/?)h([1-6])([^>]*)>/gi, (m, slash, lvl, attrs) =>
+      `<${slash}h${HEADING_DEMOTE[Number(lvl)] || lvl}${attrs}>`);
+  }
+  const md = (s) => (window.marked ? demoteHeadings(marked.parse(s || "")) : esc(s));
+
+  /* ---------- Status / tier helpers ---------- */
+  const TIERS = ["T1", "T2", "T3", "T4", "T5"];
+  const STATUSES = ["production-safe", "directional", "unverified", "refuted"];
+  const ST_SHORT = { "production-safe": "safe", "directional": "direct.", "unverified": "unver.", "refuted": "refuted" };
+  const DOMAINS = ["CB-core", "Industry-wide", "Governance", "Ops-Risk-AML", "Markets-IB", "Retail-Wealth", "Regulator"];
+
+  // Reader-facing labels for internal taxonomy codes (filter VALUE stays the raw code; only visible text changes).
+  const DOMAIN_LABEL = {
+    "CB-core": "CB中核", "Industry-wide": "業界横断", "Governance": "ガバナンス",
+    "Ops-Risk-AML": "オペ/リスク/AML", "Markets-IB": "マーケット/IB",
+    "Retail-Wealth": "リテール/ウェルス", "Regulator": "規制当局"
+  };
+  const domainLabel = (d) => DOMAIN_LABEL[d] || (d || "");
+
+  // Region field is partly dirty: some claims carry a domain code (or "Global / US") in `region`.
+  // Show a clean geography to the reader; suppress non-geographic leakage rather than mislabel "地域".
+  const REGION_LEAK = new Set([...DOMAINS]); // any domain code appearing in region is a mis-code
+  function regionLabel(rgn) {
+    const v = String(rgn == null ? "" : rgn).trim();
+    if (!v) return "—";
+    if (REGION_LEAK.has(v)) return "—";          // e.g. Markets-IB / Ops-Risk-AML / Retail-Wealth leaked into region
+    if (v === "Global / US") return "Global";    // normalize compound to a single geography
+    return v;
+  }
+
+  function tierBadge(t) { return TIERS.includes(t) ? `<span class="badge tier-${esc(t)}" title="${esc(t)} 信頼度">${esc(t)}</span>` : ""; }
+  function statusBadge(s) { return `<span class="badge st-${esc(s)}" title="status: ${esc(s)}"><span class="dot"></span>${esc(ST_SHORT[s] || s)}</span>`; }
+  function cidChip(id) { return `<span class="cid">${esc(id)}</span>`; }
+
+  // url reachability: returns {kind:'yes'|'yes-unsupported'|'mirror'|'no', mirror:url|null, note:text|null}
+  // - 'yes'            : page opened normally
+  // - 'yes-unsupported': page opened but the cited metric was NOT present (content-not-found)
+  // - 'mirror'         : primary bot-blocked; mirror is an http url OR (mirror=null) a non-URL corroboration note
+  function reach(c) {
+    const raw = String(c.urlAccessible || "");
+    const ua = raw.toLowerCase();
+    if (ua.startsWith("yes")) {
+      const unsupported = /metric not present|not present|not found|did not contain/.test(ua);
+      return { kind: unsupported ? "yes-unsupported" : "yes", mirror: null, note: unsupported ? raw : null };
+    }
+    if (ua.includes("mirror")) {
+      const m = (raw.split("mirror:")[1] || "").trim();
+      const url = m.startsWith("http") ? m : null;
+      // when the token after "mirror:" is not an http URL, it is a free-text corroboration note, not an openable mirror
+      return { kind: "mirror", mirror: url, note: url ? null : (m || null) };
+    }
+    return { kind: "no", mirror: null, note: null }; // "no" / "unverified" / "not-opened" / ""
+  }
+  function reachBadge(c) {
+    const r = reach(c);
+    if (r.kind === "yes") return "";
+    if (r.kind === "yes-unsupported") return `<span class="badge reach-no" title="ページは開いたが、引用した指標が本文に見当たらない">記載未確認</span>`;
+    if (r.kind === "mirror") {
+      return r.mirror
+        ? `<span class="badge reach-mirror" title="一次は bot block。mirror/代替リンクで確認">mirror</span>`
+        : `<span class="badge reach-no" title="一次は bot block。代替経由で検算 (開けるリンクなし)">一次未確認 (代替検算)</span>`;
+    }
+    return `<span class="badge reach-no" title="一次未到達 — 直接確認できていない">一次未確認</span>`;
+  }
+  function srcLink(c) {
+    const r = reach(c);
+    // only link a URL that is actually openable: primary http url, or an http mirror.
+    // for bot-blocked-with-no-mirror, do NOT link the blocked primary — say so in text.
+    const href = (r.kind === "mirror" && !r.mirror)
+      ? ""
+      : ((c.url && c.url.startsWith("http")) ? c.url : (r.mirror || ""));
+    if (!href) {
+      const txt = (r.kind === "mirror") ? "一次未確認 (代替検算)" : "URL なし";
+      return `<span style="color:var(--ink-400);font-size:11px">${txt}</span>`;
+    }
+    return `<a class="src" href="${esc(href)}" target="_blank" rel="noopener noreferrer">source ↗</a>`;
+  }
+
+  /* ---------- HERO ---------- */
+  const meta = DATA.meta, stats = DATA.stats;
+  $("#heroTitle").textContent = meta.title;
+  $("#heroSubtitle").textContent = meta.subtitle;
+  $("#hdrAsof").textContent = meta.asOf;
+  $("#mAsof").textContent = meta.asOf;
+  $("#explorerTitle").textContent = `Evidence Explorer — ${nf(stats.total)} claim を検証可能に`;
+  // 1-sentence thesis: prefer the "**Thesis:**" line in §1 body; else the intro body paragraph.
+  function deriveThesis() {
+    const sec1 = (DATA.sections || []).find(s => s.num === 1);
+    if (sec1 && sec1.body) {
+      const m = sec1.body.match(/\*\*Thesis[:：]\*\*\s*([\s\S]*?)(?:\n\n|$)/);
+      if (m && m[1]) return m[1].replace(/[*`]/g, "").replace(/\s+/g, " ").trim();
+    }
+    const introBody = (meta.intro || "").split("---").pop() || "";
+    const para = introBody.split("\n").map(s => s.trim())
+      .find(s => s && !s.startsWith("#") && !s.startsWith(">"));
+    return (para || "").replace(/[*`]/g, "").trim()
+      || "グローバル大手行の生成 AI は全社展開フェーズを越えて定量成果を出し始めているが、監査済みの実現 P&L はまだ限定的である。";
+  }
+  $("#heroThesis").innerHTML = `<strong>Thesis.</strong> ${esc(deriveThesis())}`;
+  $("#heroMeta").innerHTML = [
+    `<span><b class="tnum">${nf(stats.banks)}</b> banks</span>`,
+    `<span><b class="tnum">${nf(stats.total)}</b> verified claims</span>`,
+    `<span>Wave1 <b class="tnum">${nf(stats.wave1)}</b> + Wave2 gap <b class="tnum">${nf(stats.wave2)}</b></span>`,
+    `<span>誇張防止: 全 claim に Tier · status · 実 URL · 「言っていないこと」</span>`
+  ].join("");
+
+  /* ---------- STAT BAND ---------- */
+  function distroBars(obj, order, colorFn, total) {
+    const tot = total || Object.values(obj).reduce((a, b) => a + (b || 0), 0);
+    const rows = order.filter(k => obj[k] != null).map(k => {
+      const v = obj[k] || 0, pct = tot ? (v / tot * 100) : 0;
+      return `<div class="row"><div class="top"><span>${esc(k)}</span><b class="tnum">${nf(v)}</b></div>
+        <div class="track"><span class="seg" style="width:${pct.toFixed(1)}%;background:${colorFn(k)}"></span></div></div>`;
+    }).join("");
+    return `<div class="distro">${rows}</div>`;
+  }
+  const tierColor = k => ({ T1: "var(--t1)", T2: "var(--t2)", T3: "var(--t3)", T4: "var(--t4)", T5: "var(--t5)" }[k] || "var(--ink-400)");
+  const statColor = k => ({ "production-safe": "var(--good)", directional: "var(--info)", unverified: "var(--warn)", refuted: "var(--danger)" }[k] || "var(--ink-400)");
+
+  const urlTot = (stats.url.accessible || 0) + (stats.url.mirror || 0) + (stats.url.no || 0);
+  const reachBar = `<div class="reach" role="img" aria-label="URL 到達性: 直接 ${stats.url.accessible}, mirror ${stats.url.mirror}, 未到達 ${stats.url.no}">
+      <span style="flex:${stats.url.accessible};background:var(--good)" title="直接到達 ${stats.url.accessible}"></span>
+      <span style="flex:${stats.url.mirror};background:var(--info)" title="mirror/代替 ${stats.url.mirror}"></span>
+      <span style="flex:${stats.url.no};background:var(--warn)" title="未到達 ${stats.url.no}"></span>
+    </div>`;
+
+  $("#statBand").innerHTML = `
+    <div class="stat-card span3">
+      <span class="label">検証済 claim 総数</span>
+      <span class="big tnum">${nf(stats.total)}</span>
+      <span class="note">Wave1 ${nf(stats.wave1)} + Wave2 gap ${nf(stats.wave2)}</span>
+    </div>
+    <div class="stat-card span3">
+      <span class="label">Tier 分布 (信頼度)</span>
+      ${distroBars(stats.tier, TIERS, tierColor, stats.total)}
+    </div>
+    <div class="stat-card span3">
+      <span class="label">Status 分布 (確証度)</span>
+      ${distroBars(stats.status, STATUSES, statColor, stats.total)}
+    </div>
+    <div class="stat-card span3">
+      <span class="label">URL 到達性</span>
+      <span class="big tnum">${nf(stats.url.accessible)}<small>/ ${nf(urlTot)} 直接</small></span>
+      ${reachBar}
+      <div class="legend">
+        <span><i style="background:var(--good)"></i>直接 ${nf(stats.url.accessible)}</span>
+        <span><i style="background:var(--info)"></i>mirror ${nf(stats.url.mirror)}</span>
+        <span><i style="background:var(--warn)"></i>未到達 ${nf(stats.url.no)}</span>
+      </div>
+    </div>`;
+
+  /* ---------- TOP FINDINGS ---------- */
+  // Known secondary-media (T2) hosts: a finding linked here cannot display as T1 (primary/self-disclosure).
+  const T2_MEDIA_HOSTS = /(^|\.)(pymnts\.com|reuters\.com|bloomberg\.com|ft\.com|wsj\.com|cnbc\.com|finextra\.com|americanbanker\.com|thebanker\.com)$/i;
+  function hostOf(u) { try { return new URL(u).hostname; } catch (_) { return ""; } }
+  $("#findingsGrid").innerHTML = (DATA.topFindings || []).map(f => {
+    const [tier, ...rest] = String(f.tierStatus || "").split("/");
+    let tierTok = (tier || "").trim().split(" ")[0];
+    const stTok = (rest.join("/") || "").trim();
+    // tier-vs-source consistency: a T1 label pointing at a T2 media host is downgraded to match the cited source
+    if (tierTok === "T1" && T2_MEDIA_HOSTS.test(hostOf(f.url))) tierTok = "T2";
+    const tb = tierBadge(tierTok);
+    const stMatch = STATUSES.find(s => stTok.toLowerCase().startsWith(s));
+    const sb = stMatch ? statusBadge(stMatch) : "";
+    const extra = stTok.replace(stMatch || "", "").replace(/^[()\s]+|[()\s]+$/g, "");
+    const ids = Array.isArray(f.ids) ? f.ids.map(cidChip).join(" ") : "";
+    const href = (f.url && f.url.startsWith("http")) ? `<a class="src" href="${esc(f.url)}" target="_blank" rel="noopener noreferrer">source ↗</a>` : "";
+    return `<article class="finding">
+      <div class="rank tnum" aria-hidden="true">${esc(f.rank)}</div>
+      <div class="body">
+        <div class="bank">${esc(f.bank)}</div>
+        <div class="txt">${esc(f.finding)}</div>
+        <div class="foot">${ids}${tb}${sb}${extra ? `<span style="font-size:11px;color:var(--ink-400)">${esc(extra)}</span>` : ""}${href}</div>
+      </div>
+    </article>`;
+  }).join("");
+
+  /* ---------- SECTIONS (markdown) ---------- */
+  const sectionsHost = $("#sectionsHost");
+  const tocItems = [];
+  (DATA.sections || []).forEach((s, i) => {
+    const id = `sec-${s.num}`;
+    tocItems.push({ id, n: String(s.num), label: s.title, kind: "section" });
+    const sec = el("section", "block");
+    sec.id = id;
+    // §1, §2 and the declared main-axis §5 open by default; the rest collapse for scan-ability.
+    const openByDefault = i < 2 || s.num === 5;
+    const longBody = (s.body || "").length > 8000;
+    sec.innerHTML = `
+      <div class="sec-head"><span class="kicker">§${s.num}</span></div>
+      <h2 class="sec-title">${esc(s.title)}</h2>
+      <div class="sec-rule"></div>
+      <div class="prose-card">
+        <details ${openByDefault ? "open" : ""}>
+          <summary>
+            <span class="sum-label" aria-hidden="true">本文${longBody ? "（長文）" : ""}</span>
+            <span class="sr-only">§${s.num} ${esc(s.title)} の本文を開閉</span>
+            <span class="hint" aria-hidden="true">${longBody ? "長文" : ""}</span>
+            <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="prose">${md(s.body)}</div>
+        </details>
+      </div>`;
+    sectionsHost.appendChild(sec);
+  });
+  sectionsHost.querySelectorAll(".prose a[href^='http']").forEach(a => { a.target = "_blank"; a.rel = "noopener noreferrer"; });
+
+  /* ---------- TOC build ---------- */
+  const tocSpec = [
+    { id: "sec-top", n: "★", label: "Top Findings", kind: "section" },
+    ...tocItems,
+    { id: "sec-explorer", n: "EE", label: "Evidence Explorer", kind: "feature" },
+    { id: "sec-excluded", n: "⊘", label: "除外 claim", kind: "section" },
+    { id: "sec-method", n: "§", label: "方法論 & 鮮度", kind: "section" },
+  ];
+  const tocList = $("#tocList");
+  tocSpec.forEach(t => {
+    const a = el("a", t.kind === "feature" ? "feature" : "");
+    a.href = "#" + t.id;
+    a.dataset.target = t.id;
+    a.innerHTML = `<span class="tn">${esc(t.n)}</span><span>${esc(t.label)}</span>`;
+    tocList.appendChild(a);
+  });
+
+  /* ---------- TOC navigation + scroll-spy ----------
+     Collapsed-by-default sections break height-based logic:
+     - IntersectionObserver "first intersecting" picks an earlier short collapsed bar.
+     - smooth-scroll to a target computed against the pre-expand (short) layout under-shoots.
+     Fix: position-based active computation (independent of section height), and TOC clicks
+     that expand the target FIRST, then scroll after reflow. */
+  const spyTargets = tocSpec.map(t => document.getElementById(t.id)).filter(Boolean);
+  const tocLinks = Array.from(tocList.querySelectorAll("a"));
+  const headerH = () => (parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 60);
+  let navSeq = 0;          // increments on each navigation; a newer nav supersedes a pending deferred scroll
+  function setActive(id) {
+    tocLinks.forEach(l => l.classList.toggle("active", l.dataset.target === id));
+  }
+  // open a section's <details> if it has one (no-op for Evidence Explorer etc.)
+  function expandSection(secEl) {
+    if (!secEl) return false;
+    const d = secEl.querySelector("details");
+    if (d && !d.open) { d.open = true; return true; }
+    return false;
+  }
+  // position-based active section: last section whose top is at/above the header offset
+  function computeActive() {
+    const off = headerH() + 14;
+    let activeId = spyTargets.length ? spyTargets[0].id : null;
+    for (const t of spyTargets) {
+      if (t.getBoundingClientRect().top <= off) activeId = t.id; else break;
+    }
+    // near page bottom, force the last section active (handles short trailing sections)
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4 && spyTargets.length) {
+      activeId = spyTargets[spyTargets.length - 1].id;
+    }
+    if (activeId) setActive(activeId);
+  }
+  let spyTick = false;
+  function onScrollSpy() {
+    if (spyTick) return;
+    spyTick = true;
+    requestAnimationFrame(() => { computeActive(); spyTick = false; });
+  }
+  window.addEventListener("scroll", onScrollSpy, { passive: true });
+  window.addEventListener("resize", onScrollSpy, { passive: true });
+  computeActive();
+
+  // deterministic navigation to a section id.
+  // Collapsed-by-default deep sections + smooth scroll race the layout (expanding a long body
+  // mid-animation moves the target, so an animated jump under/overshoots). We instead expand the
+  // target FIRST, let the layout reflow across two frames, then perform a single synchronous
+  // (instant) jump computed against the settled layout. Instant scroll is reflow-immune and lands
+  // deterministically; it also satisfies prefers-reduced-motion with no extra branch.
+  function scrollTopFor(target) {
+    return Math.max(0, window.scrollY + target.getBoundingClientRect().top - (headerH() + 8));
+  }
+  function navigateTo(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const seq = ++navSeq;
+    expandSection(target);
+    try { history.replaceState(null, "", "#" + id); } catch (_) {}
+    setActive(id);
+    // two rAFs: first lets the <details open> apply, second measures the reflowed layout.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (seq !== navSeq) return; // superseded by a newer navigation
+      // CSS `scroll-behavior: smooth` would otherwise animate this jump (and override behavior:'auto'
+      // in some engines), racing the post-expand reflow and under/overshooting on long jumps.
+      // Force an instant, deterministic landing for navigation, then restore the global smooth setting.
+      const rootEl = document.documentElement;
+      const prevBehavior = rootEl.style.scrollBehavior;
+      rootEl.style.scrollBehavior = "auto";
+      window.scrollTo(0, scrollTopFor(target));
+      rootEl.style.scrollBehavior = prevBehavior;
+      setActive(id);
+    }));
+  }
+  tocList.addEventListener("click", e => {
+    const a = e.target.closest("a");
+    if (!a || !a.dataset.target) return;
+    e.preventDefault();
+    navigateTo(a.dataset.target);
+  });
+
+  /* ---------- Mobile nav toggle ---------- */
+  const toc = $("#toc"), scrim = $("#scrim"), navToggle = $("#navToggle");
+  function closeNav() { toc.classList.remove("open"); scrim.classList.remove("show"); navToggle.setAttribute("aria-expanded", "false"); }
+  function openNav() { toc.classList.add("open"); scrim.classList.add("show"); navToggle.setAttribute("aria-expanded", "true"); }
+  navToggle.addEventListener("click", () => { toc.classList.contains("open") ? closeNav() : openNav(); });
+  scrim.addEventListener("click", closeNav);
+  tocList.addEventListener("click", e => { if (e.target.closest("a") && window.innerWidth <= 1040) closeNav(); });
+
+  /* ============================================================
+     EVIDENCE EXPLORER
+     ============================================================ */
+  const claims = DATA.claims || [];
+  const state = { q: "", tiers: new Set(), statuses: new Set(), domains: new Set(), bank: "" };
+
+  const countBy = (key) => claims.reduce((m, c) => { m[c[key]] = (m[c[key]] || 0) + 1; return m; }, {});
+  const tierCounts = countBy("tier"), statusCounts = countBy("status"), domainCounts = countBy("domain");
+
+  function buildChips(host, items, kindCls, sel, countMap, labelFn) {
+    host.innerHTML = "";
+    items.forEach(v => {
+      const c = el("button", `chip ${kindCls} c-${v}`);
+      c.type = "button";
+      c.setAttribute("aria-pressed", "false");
+      c.innerHTML = `${esc(labelFn ? labelFn(v) : v)} <span class="ct tnum">${countMap[v] || 0}</span>`;
+      c.addEventListener("click", () => {
+        if (sel.has(v)) { sel.delete(v); c.classList.remove("on"); c.setAttribute("aria-pressed", "false"); }
+        else { sel.add(v); c.classList.add("on"); c.setAttribute("aria-pressed", "true"); }
+        render();
+      });
+      host.appendChild(c);
+    });
+  }
+  buildChips($("#tierChips"), TIERS, "tierchip", state.tiers, tierCounts);
+  buildChips($("#statusChips"), STATUSES, "stchip", state.statuses, statusCounts);
+  buildChips($("#domainChips"), DOMAINS.filter(d => domainCounts[d]), "domchip", state.domains, domainCounts, domainLabel);
+
+  // bank select (no region facet — region values are dirty)
+  const banks = Array.from(new Set(claims.map(c => c.bank))).sort((a, b) => a.localeCompare(b));
+  const bankSel = $("#bankSelect");
+  bankSel.innerHTML = `<option value="">全銀行 (${banks.length})</option>` + banks.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join("");
+  bankSel.addEventListener("change", () => { state.bank = bankSel.value; render(); });
+
+  // search (debounced)
+  const searchInput = $("#searchInput");
+  let dt;
+  searchInput.addEventListener("input", () => { clearTimeout(dt); dt = setTimeout(() => { state.q = searchInput.value.trim().toLowerCase(); render(); }, 120); });
+
+  // reset
+  $("#btnReset").addEventListener("click", () => {
+    state.q = ""; state.bank = ""; state.tiers.clear(); state.statuses.clear(); state.domains.clear();
+    searchInput.value = ""; bankSel.value = "";
+    document.querySelectorAll(".chip.on").forEach(c => { c.classList.remove("on"); c.setAttribute("aria-pressed", "false"); });
+    render();
+  });
+
+  function matches(c) {
+    if (state.tiers.size && !state.tiers.has(c.tier)) return false;
+    if (state.statuses.size && !state.statuses.has(c.status)) return false;
+    if (state.domains.size && !state.domains.has(c.domain)) return false;
+    if (state.bank && c.bank !== state.bank) return false;
+    if (state.q) {
+      const hay = `${c.bank} ${c.useCase} ${c.claim} ${c.id} ${c.region} ${c.domain} ${c.quote || ""} ${c.caveat || ""}`.toLowerCase();
+      if (!hay.includes(state.q)) return false;
+    }
+    return true;
+  }
+
+  const expBody = $("#expBody");
+  const expCards = $("#expCards");
+  const countPill = $("#countPill");
+  const openRows = new Set(); // by id
+
+  function detailHTML(c) {
+    const r = reach(c);
+    // only present an openable link. Never link a bot-blocked primary that has no working mirror.
+    const href = (r.kind === "mirror" && !r.mirror)
+      ? ""
+      : ((c.url && c.url.startsWith("http")) ? c.url : (r.mirror || ""));
+    let srcHtml;
+    if (href) {
+      srcHtml = `<a class="url-mono" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(href)} ↗</a>`;
+    } else if (r.kind === "mirror") {
+      // bot-blocked primary, no openable mirror — show the (non-linked) blocked primary for reference + how it was corroborated
+      srcHtml = `<span class="url-mono" style="color:var(--ink-500)">${esc(c.url || "URL なし")}</span>` +
+        ` <span style="color:var(--ink-400);font-size:11px">(一次 bot block・直接リンク不可)</span>`;
+    } else {
+      srcHtml = `<span style="color:var(--ink-400)">URL なし — 一次未確認</span>`;
+    }
+    const mirrorNote = (r.kind === "mirror")
+      ? (r.mirror
+          ? `<div class="mirror-note">一次は bot block。確認は上記 mirror / 代替リンク経由。</div>`
+          : `<div class="mirror-note">一次は bot block で直接開けない。代替経由で検算済み${r.note ? `: ${esc(r.note)}` : "。"}</div>`)
+      : "";
+    const unsupportedNote = (r.kind === "yes-unsupported")
+      ? `<div class="flag-note">⚠ ページは開いたが、引用した指標は本文に見当たらない (status は unverified)。</div>`
+      : "";
+    const flagNote = (r.kind === "no") ? `<div class="flag-note">⚠ 一次未到達 — このセッションで直接確認できていない claim。</div>` : "";
+    return `<div class="inner">
+      <div class="meta-line">
+        ${cidChip(c.id)}
+        <span>地域: <b>${esc(regionLabel(c.region))}</b></span>
+        <span>領域: <b>${esc(domainLabel(c.domain))}</b></span>
+        <span>出典型: <b>${esc(c.sourceType || "—")}</b></span>
+        <span>impact: <b>${esc(c.impact || "—")}</b></span>
+        <span>鮮度: <b>${esc(c.freshness || "—")}</b></span>
+      </div>
+      <div class="qc-grid">
+        <div class="qt-block">
+          <div class="blk-label">▎supporting quote (逐語引用)</div>
+          <div class="blk-body">${c.quote ? esc(c.quote) : "<span style='color:var(--ink-400)'>(逐語引用なし)</span>"}</div>
+        </div>
+        <div class="cv-block">
+          <div class="blk-label">⚠ ソースが言っていないこと (caveat)</div>
+          <div class="blk-body">${c.caveat ? esc(c.caveat) : "<span style='color:var(--ink-400)'>(注記なし)</span>"}</div>
+        </div>
+      </div>
+      <div class="meta-line src-line">出典: ${srcHtml}</div>
+      ${mirrorNote}${unsupportedNote}${flagNote}
+    </div>`;
+  }
+
+  // a reachability state that should warn the reader (no openable confirmable source)
+  const reachWarns = (r) => r.kind === "no" || r.kind === "yes-unsupported" || (r.kind === "mirror" && !r.mirror);
+
+  function rowHTML(c) {
+    const r = reach(c);
+    const flagCls = reachWarns(r) ? " flag-no" : "";
+    const isOpen = openRows.has(c.id);
+    const detailId = `detail-${esc(c.id)}`;
+    return `<tr class="exp-row${flagCls}${isOpen ? " open" : ""}" data-id="${esc(c.id)}" tabindex="0" role="button" aria-expanded="${isOpen}" aria-controls="${detailId}">
+        <td><span class="expander" aria-hidden="true">▸</span></td>
+        <td class="c-id">${cidChip(c.id)}</td>
+        <td class="c-bank">${esc(c.bank)}<span class="reg">${esc(regionLabel(c.region))}</span></td>
+        <td class="c-domain">${esc(domainLabel(c.domain))}</td>
+        <td class="c-claim"><span class="uc">${esc(c.useCase || "")}</span>${esc(c.claim)}</td>
+        <td class="c-badges">${tierBadge(c.tier)} ${statusBadge(c.status)} ${reachBadge(c)}</td>
+        <td class="c-src">${srcLink(c)}</td>
+      </tr>` +
+      (isOpen ? `<tr class="exp-detail" data-detail="${esc(c.id)}"><td colspan="7" id="${detailId}" role="region" aria-label="${esc(c.id)} 詳細" tabindex="-1">${detailHTML(c)}</td></tr>` : "");
+  }
+
+  function cardHTML(c) {
+    const r = reach(c);
+    const flagCls = reachWarns(r) ? " flag-no" : "";
+    const isOpen = openRows.has(c.id);
+    const cdetailId = `cdetail-${esc(c.id)}`;
+    return `<article class="ecard${flagCls}" data-id="${esc(c.id)}" tabindex="0" role="button" aria-expanded="${isOpen}" aria-controls="${cdetailId}">
+      <div class="top">
+        <div><span class="bank">${esc(c.bank)}</span> <span class="reg">${esc(regionLabel(c.region))} · ${esc(domainLabel(c.domain))}</span></div>
+        ${cidChip(c.id)}
+      </div>
+      <div class="uc">${esc(c.useCase || "")}</div>
+      <div class="claim">${esc(c.claim)}</div>
+      <div class="badges">${tierBadge(c.tier)} ${statusBadge(c.status)} ${reachBadge(c)} ${srcLink(c)}</div>
+      ${isOpen ? `<div class="detail" id="${cdetailId}" role="region" aria-label="${esc(c.id)} 詳細">${detailHTML(c)}</div>` : ""}
+    </article>`;
+  }
+
+  // card view is shown at <=720px (see @media). Build only the visible view to avoid
+  // re-stringifying all claims twice (table + card) on every keystroke / chip / toggle.
+  const cardMq = window.matchMedia ? window.matchMedia("(max-width: 720px)") : { matches: false };
+  let lastFiltered = [];
+  function render() {
+    const filtered = claims.filter(matches);
+    lastFiltered = filtered;
+    // visible pill + screen-reader announcement (role=status/aria-live on #countPill).
+    // aria-atomic=true => the SR reads the whole pill on each update, including the zero case.
+    const srText = filtered.length
+      ? `${filtered.length} / 全 ${claims.length} 件が該当`
+      : `該当する claim はありません (全 ${claims.length} 件中 0 件)`;
+    countPill.innerHTML = `<b class="tnum">${filtered.length}</b> / ${claims.length} 件<span class="sr-only">, ${esc(srText)}</span>`;
+
+    const cardView = cardMq.matches;
+    if (!filtered.length) {
+      const empty = `<div class="empty-state"><div class="big">該当 claim なし</div><div>検索語・フィルタを緩めてください。</div></div>`;
+      if (cardView) { expCards.innerHTML = empty; expBody.innerHTML = ""; }
+      else { expBody.innerHTML = `<tr><td colspan="7">${empty}</td></tr>`; expCards.innerHTML = ""; }
+      return;
+    }
+    if (cardView) { expCards.innerHTML = filtered.map(cardHTML).join(""); expBody.innerHTML = ""; }
+    else { expBody.innerHTML = filtered.map(rowHTML).join(""); expCards.innerHTML = ""; }
+  }
+  // rebuild the appropriate view when crossing the table/card breakpoint
+  const onCardMq = () => render();
+  cardMq.addEventListener ? cardMq.addEventListener("change", onCardMq) : (cardMq.addListener && cardMq.addListener(onCardMq));
+
+  function toggleRow(id) {
+    const wasOpen = openRows.has(id);
+    if (wasOpen) openRows.delete(id); else openRows.add(id);
+    render();
+    // render() rebuilds the list, dropping focus. Restore it to keep keyboard context.
+    // On open: move focus into the revealed detail region (table only; the region is focusable).
+    // On close (or card): return focus to the controlling element.
+    requestAnimationFrame(() => {
+      const sel = `[data-id="${CSS.escape(id)}"]`;
+      if (!wasOpen) {
+        const region = document.getElementById(`detail-${id}`);
+        if (region && region.offsetParent !== null) { region.focus(); return; }
+      }
+      const ctrl = document.querySelector(`.exp-row${sel}, .ecard${sel}`);
+      if (ctrl) ctrl.focus();
+    });
+  }
+
+  // event delegation (table)
+  expBody.addEventListener("click", e => {
+    const row = e.target.closest(".exp-row");
+    if (!row) return;
+    if (e.target.closest("a")) return;
+    toggleRow(row.dataset.id);
+  });
+  expBody.addEventListener("keydown", e => {
+    const row = e.target.closest(".exp-row");
+    if (!row) return;
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRow(row.dataset.id); }
+  });
+  // event delegation (cards)
+  expCards.addEventListener("click", e => {
+    const card = e.target.closest(".ecard");
+    if (!card) return;
+    if (e.target.closest("a")) return;
+    toggleRow(card.dataset.id);
+  });
+  expCards.addEventListener("keydown", e => {
+    const card = e.target.closest(".ecard");
+    if (!card) return;
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRow(card.dataset.id); }
+  });
+
+  render();
+
+  /* ============================================================
+     EXCLUDED SHOWCASE
+     ============================================================ */
+  const excluded = DATA.excluded || [];
+  const exRefuted = excluded.filter(e => e.status === "refuted").length;
+  const exUnver = excluded.filter(e => e.status === "unverified").length;
+  $("#excludedNote").innerHTML =
+    `本文の<b>断定</b>には使わなかった <b>${excluded.length}</b> 件 (refuted ${exRefuted} / unverified ${exUnver})。
+     誇張防止のため、否定された主張・一次未確認の主張を隠さず明示する。`;
+  $("#excludedGrid").innerHTML = excluded.map(e => {
+    const href = (e.url && e.url.startsWith("http")) ? `<a class="src" href="${esc(e.url)}" target="_blank" rel="noopener noreferrer">source ↗</a>` : `<span style="font-size:11px;color:var(--ink-400)">URL なし</span>`;
+    return `<article class="excl-card ${esc(e.status)}">
+      <div class="top">
+        ${cidChip(e.id)}
+        <span class="bank">${esc(e.bank)}</span>
+        ${tierBadge(e.tier)} ${statusBadge(e.status)}
+      </div>
+      <div class="claim">${esc(e.claim)}</div>
+      ${e.caveat ? `<div class="cav"><b>なぜ除外:</b> ${esc(e.caveat)}</div>` : ""}
+      <div>${href}</div>
+    </article>`;
+  }).join("");
+
+  const dropped = DATA.dropped || [];
+  $("#droppedCount").textContent = dropped.length;
+  $("#droppedList").innerHTML = dropped.map(d => `<div class="di">
+      <div class="bk">${esc(d.bucket || "")}</div>
+      <div class="cl">${esc(d.claim)}</div>
+      <div class="rs">${esc(d.reason)}</div>
+    </div>`).join("");
+
+  /* ---------- methodology fill ---------- */
+  $("#mNoUrl").textContent = stats.url.no;
+
+  /* ---------- footer ---------- */
+  $("#footMeta").textContent = `${meta.title} · as-of ${meta.asOf} · ${nf(stats.total)} claims / ${nf(stats.banks)} banks`;
+
+  /* ---------- Cold-load hash: expand + scroll to a deep-linked section ----------
+     Sections §3-§11 are collapsed by default, so a raw hash jump would land on a short
+     collapsed bar. Re-run the deterministic expand-then-scroll on load. */
+  (function handleInitialHash() {
+    const id = (location.hash || "").replace(/^#/, "");
+    if (id && document.getElementById(id)) {
+      // defer to let layout settle, then expand-and-scroll deterministically
+      requestAnimationFrame(() => navigateTo(id));
+    }
+  })();
+  // honor in-page hash changes (e.g. browser back/forward) deterministically too
+  window.addEventListener("hashchange", () => {
+    const id = (location.hash || "").replace(/^#/, "");
+    if (id && document.getElementById(id)) navigateTo(id);
+  });
+
+  /* ---------- Esc: close mobile nav, else collapse focused open row ---------- */
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if (toc.classList.contains("open")) { closeNav(); navToggle.focus(); return; }
+    const focusedRow = document.activeElement && document.activeElement.closest && document.activeElement.closest(".exp-row.open, .ecard[aria-expanded='true']");
+    if (focusedRow && openRows.has(focusedRow.dataset.id)) {
+      const id = focusedRow.dataset.id;
+      toggleRow(id);
+      const again = document.querySelector(`[data-id="${CSS.escape(id)}"]`);
+      if (again) again.focus();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
