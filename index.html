@@ -83,6 +83,8 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --header-h: 60px;
+  --banner-h: 44px;                 /* sticky deck banner height (JS keeps this in sync with actual height) */
+  --stack-h: calc(var(--header-h) + var(--banner-h));  /* total sticky top offset (banner + header) */
   --focus-ring: var(--teal-600);
 }
 
@@ -145,7 +147,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); }
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--stack-h) + 16px); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -179,7 +181,7 @@ a:hover { text-decoration: underline; }
 /* 2.4.11 Focus Not Obscured: keep Tab-focused controls clear of the sticky header */
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
 summary:focus-visible, [tabindex]:focus-visible {
-  scroll-margin-top: calc(var(--header-h) + 12px);
+  scroll-margin-top: calc(var(--stack-h) + 12px);
 }
 button { font-family: inherit; }
 
@@ -203,8 +205,10 @@ button { font-family: inherit; }
 /* ============================================================
    Header
    ============================================================ */
+/* Deck banner — sticks above the header so the slide-version link stays visible on scroll */
+.deck-banner { position: sticky; top: 0; z-index: 101; }
 .site-header {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: var(--banner-h); z-index: 100;
   height: var(--header-h);
   background: var(--header-bg);
   color: #fff;
@@ -254,8 +258,8 @@ button { font-family: inherit; }
   align-items: start;
 }
 .toc {
-  position: sticky; top: var(--header-h);
-  height: calc(100vh - var(--header-h));
+  position: sticky; top: var(--stack-h);
+  height: calc(100vh - var(--stack-h));
   overflow-y: auto;
   padding: 22px 14px 40px 20px;
   border-right: 1px solid var(--line);
@@ -356,7 +360,7 @@ main { min-width: 0; padding: 0 clamp(20px, 4vw, 56px) 80px; }
 /* ============================================================
    Section scaffolding
    ============================================================ */
-section.block { padding-top: 40px; margin-top: 8px; scroll-margin-top: calc(var(--header-h) + 12px); }
+section.block { padding-top: 40px; margin-top: 8px; scroll-margin-top: calc(var(--stack-h) + 12px); }
 .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 4px; flex-wrap: wrap; }
 .sec-head .kicker {
   font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
@@ -659,7 +663,7 @@ footer.site-foot {
 @media (max-width: 1040px) {
   .shell { grid-template-columns: 1fr; }
   .toc {
-    position: fixed; top: var(--header-h); left: 0; bottom: 0; width: 280px; z-index: 90;
+    position: fixed; top: var(--stack-h); left: 0; bottom: 0; width: 280px; z-index: 90;
     background: var(--surface); box-shadow: var(--sh-3); transform: translateX(-105%);
     transition: transform .22s ease; border-right: 1px solid var(--line); height: auto;
   }
@@ -669,7 +673,7 @@ footer.site-foot {
     background: rgba(255,255,255,.1); color: #fff; border: 1px solid rgba(255,255,255,.18);
     border-radius: var(--r-sm); padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer; margin-right: 14px;
   }
-  .scrim { position: fixed; inset: var(--header-h) 0 0 0; background: rgba(17,23,38,.4); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+  .scrim { position: fixed; inset: var(--stack-h) 0 0 0; background: rgba(17,23,38,.4); z-index: 80; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
   .scrim.show { opacity: 1; pointer-events: auto; }
 }
 @media (max-width: 880px) {
@@ -1179,7 +1183,19 @@ footer.site-foot {
      that expand the target FIRST, then scroll after reflow. */
   const spyTargets = tocSpec.map(t => document.getElementById(t.id)).filter(Boolean);
   const tocLinks = Array.from(tocList.querySelectorAll("a"));
-  const headerH = () => (parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 60);
+  // Sticky offset = deck banner + header. Measure live so anchor scrolls land below both,
+  // and keep --banner-h synced with the banner's real height (it wraps on narrow widths).
+  const deckBanner = document.querySelector(".deck-banner");
+  const siteHeader = document.querySelector(".site-header");
+  const syncBannerH = () => {
+    const bh = deckBanner ? deckBanner.offsetHeight : 0;
+    document.documentElement.style.setProperty("--banner-h", bh + "px");
+  };
+  syncBannerH();
+  window.addEventListener("resize", syncBannerH);
+  if (window.ResizeObserver && deckBanner) new ResizeObserver(syncBannerH).observe(deckBanner);
+  const headerH = () => ((deckBanner ? deckBanner.offsetHeight : 0) +
+    (siteHeader ? siteHeader.offsetHeight : (parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h")) || 60)));
   let navSeq = 0;          // increments on each navigation; a newer nav supersedes a pending deferred scroll
   function setActive(id) {
     tocLinks.forEach(l => l.classList.toggle("active", l.dataset.target === id));
